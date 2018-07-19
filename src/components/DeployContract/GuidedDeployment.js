@@ -14,11 +14,11 @@ import {
 const Step = Steps.Step;
 
 const parentColLayout = {
-  lg: {
-    span: 18
+  xl: {
+    span: 8
   },
-  sm: {
-    span: 22
+  md: {
+    span: 12
   },
   xs: {
     span: 24
@@ -138,8 +138,8 @@ class GuidedDeployment extends Component {
 
     return (
       <div className="page">
-        <Row type="flex" justify="center">
-          <Col {...parentColLayout}>
+        <Row type="flex" justify="center" style={{ margin: '20px 0' }}>
+          <Col span={18}>
             <Steps
               network={this.props.network}
               current={currentStep}
@@ -151,6 +151,10 @@ class GuidedDeployment extends Component {
               <Step title="Expiration" />
               <Step title="Deploy" />
             </Steps>
+          </Col>
+        </Row>
+        <Row type="flex" justify="center">
+          <Col {...parentColLayout}>
             <StepAnimation direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index)}
             </StepAnimation>

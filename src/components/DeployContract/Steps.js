@@ -18,8 +18,12 @@ import { getEtherscanUrl } from '../../util/utils';
 const Panel = Collapse.Panel;
 
 function BiDirectionalNav(props) {
+  console.log(props);
   return (
-    <Row className="step-button-nav-container" justify="center" type="flex">
+    <div
+      className="step-button-nav-container"
+      style={props.isSimplified ? { width: '480px' } : { width: '100%' }}
+    >
       {props.step > 0 && (
         <Button onClick={props.onPrevClicked} className="step-back-button">
           <Icon type="left" />Back
@@ -29,7 +33,7 @@ function BiDirectionalNav(props) {
         {props.text}
         <Icon type="right" />
       </Button>
-    </Row>
+    </div>
   );
 }
 
@@ -75,11 +79,7 @@ class NameContractStep extends BaseStepComponent {
 
     return (
       <div>
-        <Form
-          onSubmit={this.handleSubmit.bind(this)}
-          layout="vertical"
-          hideRequiredMark={true}
-        >
+        <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
           <h1>Contract Name and Collateral Token</h1>
           <div>
             MARKET allows users to create user defined derivative contracts by
@@ -102,6 +102,7 @@ class NameContractStep extends BaseStepComponent {
             <br />
             Example name <b>ETH/BTC-Kraken_2018-03-01</b>
           </div>
+          <br />
           <Field
             name="contractName"
             initialValue={this.props.contractName}
@@ -131,12 +132,7 @@ class NameContractStep extends BaseStepComponent {
             initialValue={this.props.collateralTokenAddress}
             form={this.props.form}
           />
-          <Row type="flex" justify="end">
-            <Col>
-              <BiDirectionalNav text="Select Oracle" {...this.props} />
-              {/* <BiDirectionalNav text="Deploy Contract" {...this.props} /> */}
-            </Col>
-          </Row>
+          <BiDirectionalNav text="Select Oracle" {...this.props} />
         </Form>
       </div>
     );
@@ -270,11 +266,7 @@ class PricingStep extends BaseStepComponent {
             />
           </div>
         )}
-        <Row type="flex" justify="end">
-          <Col>
-            <BiDirectionalNav text="Set Expiration Time" {...this.props} />
-          </Col>
-        </Row>
+        <BiDirectionalNav text="Set Expiration Time" {...this.props} />
       </Form>
     );
   }
@@ -319,7 +311,7 @@ class ExpirationStep extends BaseStepComponent {
             </span>
           </h2>
           <Field
-            name="expirationTimeStamp"
+            name="expirationTimeStampSimplified"
             initialValue={
               expirationTimeStamp
                 ? moment(expirationTimeStamp * 1000)
@@ -387,14 +379,7 @@ class DataSourceStep extends BaseStepComponent {
             initialValue={this.props.oracleQuery || initialValues.oracleQuery}
             form={this.props.form}
           />
-
-          <Row type="flex" justify="end">
-            <Col>
-              <Button type="primary" htmlType="submit">
-                Set Pricing Range<Icon type="arrow-right" />
-              </Button>
-            </Col>
-          </Row>
+          <BiDirectionalNav text="View Pricing Rules" {...this.props} />
         </Form>
       </div>
     );
@@ -419,7 +404,12 @@ class GasStep extends BaseStepComponent {
         >
           <h1>Gas Settings</h1>
           <div className="step-inner-container">
-            <GasPriceField form={form} gaslimit={gas} location={location} />
+            <GasPriceField
+              form={form}
+              gaslimit={gas}
+              location={location}
+              isSimplified={true}
+            />
           </div>
           <BiDirectionalNav text="Deploy Contract" {...this.props} />
         </Form>
@@ -885,7 +875,11 @@ class ExchangeStep extends BaseStepComponent {
             onSelect={this.props.updateDeploymentState}
           />
           <h2>Contract Name</h2>
-          <Field name="contractName" initialValue={contractName} form={form} />
+          <Field
+            name="contractNameSimplified"
+            initialValue={contractName}
+            form={form}
+          />
         </div>
         <BiDirectionalNav text="View Pricing Rules" {...this.props} />
         <Link to={'/contract/deploy?mode=quick'}>

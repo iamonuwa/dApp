@@ -122,7 +122,7 @@ class GasPriceField extends Component {
     return (
       <Row>
         <Col>
-          <h2>Gas Setting</h2>
+          {!this.props.isSimplified && <h2>Gas Setting</h2>}
           <div>{this.state.message}</div>
           <br />
           <Row gutter={16}>

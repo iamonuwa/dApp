@@ -105,6 +105,7 @@ class SimplifiedDeployment extends Component {
         key="0"
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
+        isSimplified={true}
         {...this.state}
         {...this.props}
       />,
