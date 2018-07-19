@@ -13,6 +13,7 @@ import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
 import SelectTokenField from './SelectTokenField';
 import { getEtherscanUrl } from '../../util/utils';
+import { PriceGraph } from './PriceGraph';
 
 // extract antd subcomponents
 const Panel = Collapse.Panel;
@@ -206,41 +207,45 @@ class PricingStep extends BaseStepComponent {
           <div
             className={this.props.isSimplified ? 'step-inner-container' : ''}
           >
-            <h2>Price Floor</h2>
-            {!this.props.isSimplified && (
-              <div className="m-bottom-20">
-                This is the lower bound of price exposure this contract will
-                trade. If the oracle reports a price below this value the
-                contract will enter into settlement. This should also be
-                represented as a whole number. If we take the example above of a
-                price of 190.22 and decide the Floor for our contract should be
-                150.00, we would enter 15000 here.
-              </div>
-            )}
-            <Field
-              name={
-                this.props.isSimplified ? 'priceFloorSimplified' : 'priceFloor'
-              }
-              initialValue={this.props.priceFloor}
-              form={this.props.form}
-            />
-            <br />
-
-            <h2>Price Cap</h2>
-            {!this.props.isSimplified && (
-              <div className="m-bottom-20">
-                This is the upper bound of price exposure this contract will
-                trade. If the oracle reports a price above this value the
-                contract will enter into settlement. Following our example, if
-                we decide the Cap for our contract should be 230.00, we would
-                enter 23000 as our Cap.
-              </div>
-            )}
-            <Field
-              name={this.props.isSimplified ? 'priceCapSimplified' : 'priceCap'}
-              initialValue={this.props.priceCap}
-              form={this.props.form}
-            />
+          <h2>Price Cap</h2>
+          {!this.props.isSimplified && (
+            <div className="m-bottom-20">
+              This is the upper bound of price exposure this contract will
+              trade. If the oracle reports a price above this value the
+              contract will enter into settlement. Following our example, if
+              we decide the Cap for our contract should be 230.00, we would
+              enter 23000 as our Cap.
+            </div>
+          )}
+          <Field
+            name={this.props.isSimplified ? 'priceCapSimplified' : 'priceCap'}
+            initialValue={this.props.priceCap}
+            form={this.props.form}
+          />
+          <br />
+          <h2>Price Floor</h2>
+          {!this.props.isSimplified && (
+            <div className="m-bottom-20">
+              This is the lower bound of price exposure this contract will
+              trade. If the oracle reports a price below this value the
+              contract will enter into settlement. This should also be
+              represented as a whole number. If we take the example above of a
+              price of 190.22 and decide the Floor for our contract should be
+              150.00, we would enter 15000 here.
+            </div>
+          )}
+          <Field
+            name={
+              this.props.isSimplified ? 'priceFloorSimplified' : 'priceFloor'
+            }
+            initialValue={this.props.priceFloor}
+            form={this.props.form}
+          />
+          {this.props.isSimplified && (
+            <div className="deploy-step">
+              <PriceGraph priceCap={this.props.form.getFieldValue('priceCapSimplified')} priceFloor= {this.props.form.getFieldValue('priceFloorSimplified')} price ={this.props.price} />
+            </div>
+          )}
           </div>
           <br />
           {!this.props.isSimplified && (
