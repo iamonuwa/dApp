@@ -6,7 +6,8 @@ import {
   Row,
   Popover,
   Slider,
-  Collapse
+  Collapse,
+  Button
 } from 'antd';
 import React, { Component } from 'react';
 import Rx from 'rxjs/Rx';
@@ -40,6 +41,7 @@ class GasPriceField extends Component {
       gaslimit: props.gaslimit,
       gasprice: 2,
       condition: null,
+      isGasAPILoading: false,
       message: this.getMessage(null, props.gaslimit, 2)
     };
 
@@ -81,6 +83,7 @@ class GasPriceField extends Component {
     this.setState({
       condition: data,
       gasprice: recommendedGasPrice,
+      isGasAPILoading: false,
       message: this.getMessage(data, this.state.gaslimit, recommendedGasPrice)
     });
   }
@@ -115,7 +118,7 @@ class GasPriceField extends Component {
     const time = this.getTime(condition, gasPrice);
     const cost = (gasLimit * gasPrice / 1000000000).toFixed(5);
     const message = !condition ? (
-      <div>
+      <div style={{ fontSize: '14px' }}>
         The transaction will cost <strong>{cost} ETH</strong>, the confirmation
         time depends on the overall network traffic
       </div>
@@ -137,6 +140,10 @@ class GasPriceField extends Component {
 
   componentDidMount() {
     const gasInfoUrl = 'https://ethgasstation.info/json/ethgasAPI.json';
+    let _this = this;
+    _this.setState({
+      isGasAPILoading: true
+    });
     this.subscription = Rx.Observable.ajax({
       url: gasInfoUrl,
       method: 'GET',
@@ -144,7 +151,16 @@ class GasPriceField extends Component {
       crossDomain: true
     })
       .map(data => data.response)
-      .subscribe(this.updateNetworkCondition);
+      .subscribe(
+        function(data) {
+          _this.updateNetworkCondition(data);
+        },
+        function(e) {
+          _this.setState({
+            isGasAPILoading: false
+          });
+        }
+      );
   }
 
   getGasPriceSliderMarks() {
@@ -192,57 +208,65 @@ class GasPriceField extends Component {
       <Row id="gas-settings">
         <Col>
           {!this.props.isSimplified && <h2>Gas Setting</h2>}
-          <div
-            style={{
-              minHeight: '100px',
-              fontSize: '18px',
-              fontWeight: '100'
-            }}
-          >
-            {this.state.message}
-            <Collapse bordered={false} className="m-bottom-40">
-              <Panel header="Help me understand this">
-                <ul>
-                  <li>
-                    <a
-                      href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Why do I need gas?
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://etherscan.io/gastracker"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      What gas price should I use?
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://ethgasstation.info/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      What are the current network conditions?
-                    </a>
-                  </li>
-                </ul>
-              </Panel>
-            </Collapse>
-          </div>
-          <Slider
-            min={this.getMinValueForGasPrice()}
-            max={this.getMaxValueForGasPrice()}
-            value={this.state.gasprice}
-            onChange={this.onGasPriceChange.bind(this)}
-            step={0.01}
-            tipFormatter={null}
-            marks={this.getGasPriceSliderMarks()}
-          />
+          {!this.state.isGasAPILoading ? (
+            <div>
+              <div
+                style={{
+                  minHeight: '100px',
+                  fontSize: '18px',
+                  fontWeight: '100'
+                }}
+              >
+                {this.state.message}
+                <Collapse bordered={false} className="m-bottom-40">
+                  <Panel header="Help me understand this">
+                    <ul>
+                      <li>
+                        <a
+                          href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Why do I need gas?
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://etherscan.io/gastracker"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          What gas price should I use?
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://ethgasstation.info/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          What are the current network conditions?
+                        </a>
+                      </li>
+                    </ul>
+                  </Panel>
+                </Collapse>
+              </div>
+              <Slider
+                min={this.getMinValueForGasPrice()}
+                max={this.getMaxValueForGasPrice()}
+                value={this.state.gasprice}
+                onChange={this.onGasPriceChange.bind(this)}
+                step={0.01}
+                tipFormatter={null}
+                marks={this.getGasPriceSliderMarks()}
+              />
+            </div>
+          ) : (
+            <div className="text-center m-top-20 m-bottom-20">
+              <Icon type="loading" /> Estimating Gas settings
+            </div>
+          )}
           <Row gutter={16}>
             <Col span={24} className="m-top-40">
               <FormItem
