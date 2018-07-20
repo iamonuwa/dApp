@@ -18,7 +18,6 @@ import { getEtherscanUrl } from '../../util/utils';
 const Panel = Collapse.Panel;
 
 function BiDirectionalNav(props) {
-  console.log(props);
   return (
     <div
       className="step-button-nav-container"
