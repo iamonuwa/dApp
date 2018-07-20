@@ -6,8 +6,7 @@ import {
   Row,
   Popover,
   Slider,
-  Collapse,
-  Button
+  Collapse
 } from 'antd';
 import React, { Component } from 'react';
 import Rx from 'rxjs/Rx';

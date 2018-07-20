@@ -14,12 +14,27 @@ const formButtonLayout = {
   }
 };
 
+const formItemFullColLayout = {
+  xs: {
+    span: 24
+  }
+};
+
 const formItemColLayout = {
   lg: {
-    span: 8
+    span: 12
   },
-  sm: {
-    span: 11
+  xs: {
+    span: 24
+  }
+};
+
+const parentColLayout = {
+  xl: {
+    span: 10
+  },
+  md: {
+    span: 12
   },
   xs: {
     span: 24
@@ -37,6 +52,14 @@ function ContractFormRow(props) {
 function ContractFormCol(props) {
   return (
     <Col {...formItemColLayout} {...props}>
+      {props.children}
+    </Col>
+  );
+}
+
+function ContractFormFullWidthCol(props) {
+  return (
+    <Col {...formItemFullColLayout} {...props}>
       {props.children}
     </Col>
   );
@@ -114,144 +137,156 @@ class QuickDeployment extends Component {
           }
         />
         <div className="page">
-          <Form
-            onSubmit={this.handleDeploy.bind(this)}
-            layout="vertical"
-            style={{ overflowX: 'hidden' }}
-          >
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field
-                  name="contractName"
-                  initialValue={initialValues.contractName}
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
+          <Row type="flex" justify="center">
+            <Col
+              {...parentColLayout}
+              style={{
+                padding: '50px 100px',
+                borderRadius: '4px',
+                backgroundColor: 'rgb(17, 22, 28)',
+                border: 'solid 2px #0f141b'
+              }}
+            >
+              <Form
+                onSubmit={this.handleDeploy.bind(this)}
+                layout="vertical"
+                style={{ overflowX: 'hidden' }}
+              >
+                <ContractFormRow>
+                  <ContractFormFullWidthCol>
+                    <Field
+                      name="contractName"
+                      initialValue={initialValues.contractName}
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormFullWidthCol>
 
-              <ContractFormCol>
-                <Field
-                  name="collateralTokenAddress"
-                  initialValue={initialValues.collateralTokenAddress}
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                  <ContractFormFullWidthCol>
+                    <Field
+                      name="collateralTokenAddress"
+                      initialValue={initialValues.collateralTokenAddress}
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormFullWidthCol>
+                </ContractFormRow>
 
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field
-                  name="priceFloor"
-                  initialValue={
-                    isNaN(initialValues.priceFloor)
-                      ? ''
-                      : parseInt(initialValues.priceFloor, 10)
-                  }
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
+                <ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="priceFloor"
+                      initialValue={
+                        isNaN(initialValues.priceFloor)
+                          ? ''
+                          : parseInt(initialValues.priceFloor, 10)
+                      }
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
 
-              <ContractFormCol>
-                <Field
-                  name="priceCap"
-                  initialValue={
-                    isNaN(initialValues.priceCap)
-                      ? ''
-                      : parseInt(initialValues.priceCap, 10)
-                  }
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="priceCap"
+                      initialValue={
+                        isNaN(initialValues.priceCap)
+                          ? ''
+                          : parseInt(initialValues.priceCap, 10)
+                      }
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
+                </ContractFormRow>
 
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field
-                  name="priceDecimalPlaces"
-                  initialValue={
-                    isNaN(initialValues.priceDecimalPlaces)
-                      ? ''
-                      : parseInt(initialValues.priceDecimalPlaces, 10)
-                  }
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
+                <ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="priceDecimalPlaces"
+                      initialValue={
+                        isNaN(initialValues.priceDecimalPlaces)
+                          ? ''
+                          : parseInt(initialValues.priceDecimalPlaces, 10)
+                      }
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
 
-              <ContractFormCol>
-                <Field
-                  name="qtyMultiplier"
-                  initialValue={
-                    isNaN(initialValues.qtyMultiplier)
-                      ? ''
-                      : parseInt(initialValues.qtyMultiplier, 10)
-                  }
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="qtyMultiplier"
+                      initialValue={
+                        isNaN(initialValues.qtyMultiplier)
+                          ? ''
+                          : parseInt(initialValues.qtyMultiplier, 10)
+                      }
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
+                </ContractFormRow>
 
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field
-                  name="expirationTimeStamp"
-                  initialValue={initialValues.expirationTimeStamp}
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
+                <ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="expirationTimeStamp"
+                      initialValue={initialValues.expirationTimeStamp}
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
 
-              <ContractFormCol>
-                <Field
-                  name="oracleDataSource"
-                  initialValue={initialValues.oracleDataSource}
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                  <ContractFormCol>
+                    <Field
+                      name="oracleDataSource"
+                      initialValue={initialValues.oracleDataSource}
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormCol>
+                </ContractFormRow>
 
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field
-                  name="oracleQuery"
-                  initialValue={initialValues.oracleQuery}
-                  form={form}
-                  showHint
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                <ContractFormRow>
+                  <ContractFormFullWidthCol>
+                    <Field
+                      name="oracleQuery"
+                      initialValue={initialValues.oracleQuery}
+                      form={form}
+                      showHint
+                    />
+                  </ContractFormFullWidthCol>
+                </ContractFormRow>
 
-            <ContractFormRow>
-              <ContractFormCol>
-                <GasPriceField
-                  form={form}
-                  gaslimit={gas}
-                  location={this.props.location}
-                  network={network}
-                />
-              </ContractFormCol>
-            </ContractFormRow>
+                <ContractFormRow>
+                  <ContractFormFullWidthCol>
+                    <GasPriceField
+                      form={form}
+                      gaslimit={gas}
+                      location={this.props.location}
+                      network={network}
+                    />
+                  </ContractFormFullWidthCol>
+                </ContractFormRow>
 
-            <Row type="flex" justify="center">
-              <Col {...formButtonLayout}>
-                <Button
-                  className="submit-button"
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
-                  disabled={this.isSubmitDisabled()}
-                  style={{ width: '100%' }}
-                >
-                  Deploy Contract
-                </Button>
-              </Col>
-            </Row>
-          </Form>
+                <Row type="flex" justify="center">
+                  <Col {...formButtonLayout}>
+                    <Button
+                      className="submit-button"
+                      type="primary"
+                      htmlType="submit"
+                      loading={loading}
+                      disabled={this.isSubmitDisabled()}
+                      style={{ width: '100%' }}
+                    >
+                      Deploy Contract
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Col>
+          </Row>
         </div>
       </div>
     );
