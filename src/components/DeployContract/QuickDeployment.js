@@ -6,11 +6,14 @@ import Field from './DeployContractField';
 import GasPriceField from '../GasPriceField';
 
 const formButtonLayout = {
+  xl: {
+    span: 10
+  },
+  md: {
+    span: 18
+  },
   xs: {
     span: 24
-  },
-  sm: {
-    span: 8
   }
 };
 
@@ -138,15 +141,10 @@ class QuickDeployment extends Component {
         />
         <div className="page">
           <Row type="flex" justify="center">
-            <Col
-              {...parentColLayout}
-              style={{
-                padding: '50px 100px',
-                borderRadius: '4px',
-                backgroundColor: 'rgb(17, 22, 28)',
-                border: 'solid 2px #0f141b'
-              }}
-            >
+            <Col {...parentColLayout} className="deploy-contract-container">
+              <h2 className="text-center m-bottom-20">
+                Quick Deploy Contracts
+              </h2>
               <Form
                 onSubmit={this.handleDeploy.bind(this)}
                 layout="vertical"

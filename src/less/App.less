@@ -53,6 +53,13 @@ code {
         }
     }
 
+    .deploy-contract-container {
+        padding: 50px 100px;
+        border-radius: 4px;
+        background-color: rgb(17, 22, 28);
+        border: solid 2px #0f141b;
+    }
+
     .ant-calendar {
         width: 300px;
     }
@@ -170,6 +177,30 @@ code {
             .ant-collapse-item {
                 border: 0;
             }
+        }
+        .ant-slider-handle {
+            margin-top: -11px;
+            height: 25px;
+            width: 25px;
+            font-family: 'anticon';
+
+            &:after {
+                content: '\e604';
+                font-size: 8px;
+                position: absolute;
+                top: 4px;
+                right: 4px;
+            }
+            &:before {
+                content: '\e605';
+                font-size: 8px;
+                position: absolute;
+                top: 4px;
+                left: 3px;
+            }
+        }
+        .ant-slider-mark {
+            top: 30px;
         }
     }
 }

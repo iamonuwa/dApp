@@ -15,10 +15,13 @@ const Step = Steps.Step;
 
 const parentColLayout = {
   xl: {
-    span: 8
+    span: 10
+  },
+  lg: {
+    span: 14
   },
   md: {
-    span: 12
+    span: 18
   },
   xs: {
     span: 24
