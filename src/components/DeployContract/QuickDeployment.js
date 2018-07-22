@@ -37,7 +37,7 @@ const parentColLayout = {
     span: 10
   },
   md: {
-    span: 12
+    span: 14
   },
   xs: {
     span: 24
@@ -141,7 +141,10 @@ class QuickDeployment extends Component {
         />
         <div className="page">
           <Row type="flex" justify="center">
-            <Col {...parentColLayout} className="deploy-contract-container">
+            <Col
+              {...parentColLayout}
+              className="deploy-contract-container quick-deploy"
+            >
               <h2 className="text-center m-bottom-20">
                 Quick Deploy Contracts
               </h2>

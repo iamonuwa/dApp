@@ -351,39 +351,6 @@ const fieldSettingsByName = {
   },
 
   expirationTimeStamp: {
-    label: 'Expiration Time',
-    initialValue: moment().add(28, 'days'),
-    rules: [
-      {
-        required: true,
-        message: 'Please enter an expiration time'
-      },
-      {
-        validator: timestampValidator
-      }
-    ],
-    extra:
-      'Expiration timestamp for all open positions to settle. Cannot be more than 60 days from now.',
-
-    component: () => (
-      <DatePicker
-        showTime
-        disabledDate={current => {
-          const now = moment().startOf('day');
-          return (
-            current &&
-            (current.valueOf() < moment().endOf('day') ||
-              current.diff(now, 'days') > 60)
-          );
-        }}
-        showToday={false}
-        format="YYYY-MM-DD HH:mm:ss"
-        style={{ width: '100%' }}
-      />
-    )
-  },
-
-  expirationTimeStampSimplified: {
     initialValue: moment().add(28, 'days'),
     rules: [
       {

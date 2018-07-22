@@ -54,10 +54,17 @@ code {
     }
 
     .deploy-contract-container {
-        padding: 50px 100px;
         border-radius: 4px;
         background-color: rgb(17, 22, 28);
         border: solid 2px #0f141b;
+    }
+
+    .quick-deploy {
+        padding: 50px 5%;
+    }
+
+    .guided-deploy {
+        padding: 50px 100px;
     }
 
     .ant-calendar {
@@ -162,22 +169,22 @@ code {
         color: rgba(255, 255, 255, 0.25);
     }
 
-    #gas-settings {
-        .ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow {
-            left: 0;
-        }
-        .ant-collapse > .ant-collapse-item > .ant-collapse-header {
-            padding: 12px 0 12px 15px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .ant-collapse-borderless {
-            background: transparent;
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow {
+        left: 0;
+    }
+    .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+        font-size: 12px;
+        font-weight: 500;
+    }
+    .ant-collapse-borderless {
+        background: transparent;
 
-            .ant-collapse-item {
-                border: 0;
-            }
+        .ant-collapse-item {
+            border: 0;
         }
+    }
+
+    #gas-settings {
         .ant-slider-handle {
             margin-top: -11px;
             height: 25px;
@@ -189,7 +196,7 @@ code {
                 font-size: 8px;
                 position: absolute;
                 top: 4px;
-                right: 4px;
+                right: 3px;
             }
             &:before {
                 content: '\e605';
@@ -201,6 +208,9 @@ code {
         }
         .ant-slider-mark {
             top: 30px;
+        }
+        .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+            padding: 12px 0 12px 15px;
         }
     }
 }

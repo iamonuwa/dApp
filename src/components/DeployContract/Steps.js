@@ -2,12 +2,11 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import { Button, Col, Form, Icon, Row, Collapse, Timeline } from 'antd';
+import { Button, Form, Icon, Collapse, Steps } from 'antd';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Loader from '../Loader';
 import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
@@ -16,6 +15,7 @@ import { getEtherscanUrl } from '../../util/utils';
 
 // extract antd subcomponents
 const Panel = Collapse.Panel;
+const Step = Steps.Step;
 
 function BiDirectionalNav(props) {
   return (
@@ -78,7 +78,7 @@ class NameContractStep extends BaseStepComponent {
 
     return (
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
-        <div className="deploy-contract-container">
+        <div className="deploy-contract-container guided-deploy">
           <h1>Contract Name and Collateral Token</h1>
           <div>
             MARKET allows users to create user defined derivative contracts by
@@ -155,12 +155,16 @@ class PricingStep extends BaseStepComponent {
       >
         <div
           className={
-            !this.props.isSimplified ? 'deploy-contract-container' : ''
+            !this.props.isSimplified
+              ? 'deploy-contract-container guided-deploy'
+              : ''
           }
         >
-          <h1>Specify Pricing Rules</h1>
+          <h1 className={this.props.isSimplified ? 'text-center' : ''}>
+            Specify Pricing Rules
+          </h1>
           {this.props.isSimplified && (
-            <h3>
+            <h3 className="text-center">
               Current Price of {this.props.symbolName}:{' '}
               <span className="text-primary">{this.props.price}</span>
             </h3>
@@ -303,8 +307,12 @@ class ExpirationStep extends BaseStepComponent {
         layout="vertical"
         hideRequiredMark={true}
       >
-        <div className={!isSimplified ? 'deploy-contract-container' : ''}>
-          <h1>Set Expiration</h1>
+        <div
+          className={
+            !isSimplified ? 'deploy-contract-container guided-deploy' : ''
+          }
+        >
+          <h1 className={isSimplified ? 'text-center' : ''}>Set Expiration</h1>
           {!isSimplified && (
             <div>
               Upon reaching the expiration timestamp all open positions will
@@ -320,7 +328,7 @@ class ExpirationStep extends BaseStepComponent {
               </span>
             </h2>
             <Field
-              name="expirationTimeStampSimplified"
+              name="expirationTimeStamp"
               initialValue={
                 expirationTimeStamp
                   ? moment(expirationTimeStamp * 1000)
@@ -352,7 +360,7 @@ class DataSourceStep extends BaseStepComponent {
     const { initialValues } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
-        <div className="deploy-contract-container">
+        <div className="deploy-contract-container guided-deploy">
           <h1>Set Oracle Data Source</h1>
           <div>
             Currently, Oraclize.it offers several different options for their
@@ -440,65 +448,54 @@ class DeployStep extends BaseStepComponent {
   constructor(props) {
     super(props);
 
-    this.panelKeys = [
-      'Contract Deployment',
-      'Collateral Pool Deployment',
+    this.stepKeys = [
+      'Deploy Contract',
+      'Deploy Collateral Pool',
+      'Link Contract',
       'Deployment Results'
     ];
 
-    this.panelConfig = {
-      'Contract Deployment': {
-        key: 'Contract Deployment',
+    this.stepConfig = {
+      'Deploy Contract': {
+        key: 'Deploy Contract',
         stepNum: 1,
-        pendingText: 'Pending',
-        loadingText: 'Waiting for transaction',
-        completedText: 'Deployed',
-        errorText: 'Cancelled',
-        subactions: [
-          {
-            title: 'Deploying your MarketContract',
-            explanation:
-              'The MarketContract is the main contract responsible for facilitating many to many trading. Your customized contract is about to be deployed to the Ethereum blockchain and will soon be tradeable!'
-          },
-          {
-            title: 'Adding your contract to our registry',
-            explanation: `We want other's to be able to find your awesome new contract, and are adding it to our registry so it will show up in the Contract Explorer page.`
-          }
-        ]
+        completed: false,
+        description: {
+          title: 'Deploying your MarketContract',
+          explanation: `The MarketContract is the main contract responsible for facilitating many to many trading. Your customized contract is about to be deployed to the Ethereum blockchain and will soon be tradeable!
+            We want other's to be able to find your awesome new contract, and are adding it to our registry so it will show up in the Contract Explorer page.`
+        }
       },
-      'Collateral Pool Deployment': {
-        key: 'Collateral Pool Deployment',
+      'Deploy Collateral Pool': {
+        key: 'Deploy Collateral Pool',
         stepNum: 2,
-        pendingText: 'Pending',
-        loadingText: 'Waiting for transaction',
-        completedText: 'Deployed',
-        errorText: 'Cancelled',
-        subactions: [
-          {
-            title: 'Deploying a new Collateral Pool for your contract',
-            explanation:
-              'Each MARKET Protocol Smart Contract needs its own collateral pool to ensure that all trades are always 100% collateralized and solvent!'
-          },
-          {
-            title: 'Linking the Collateral Pool to your contract',
-            explanation:
-              'Finally, we must link your newly deployed contracts together to ensure all functionality is in place. Shortly, your contract will be all set for use. Happy Trading!'
-          }
-        ]
+        completed: false,
+        description: {
+          title: 'Deploying a new Collateral Pool for your contract',
+          explanation:
+            'Each MARKET Protocol Smart Contract needs its own collateral pool to ensure that all trades are always 100% collateralized and solvent!'
+        }
+      },
+      'Link Contract': {
+        key: 'Link Contract',
+        stepNum: 3,
+        completed: false,
+        description: {
+          title: 'Linking the Collateral Pool to your contract',
+          explanation:
+            'Finally, we must link your newly deployed contracts together to ensure all functionality is in place. Shortly, your contract will be all set for use. Happy Trading!'
+        }
       },
       'Deployment Results': {
         key: 'Deployment Results',
-        stepNum: 3,
-        pendingText: 'Pending',
-        loadingText: 'Processing',
-        errorText: 'Rejected',
-        completedText: 'Succeeded'
+        stepNum: 4,
+        completed: false
       }
     };
 
     this.initialState = {
       currStepNum: 1,
-      activePanelKey: 'Contract Deployment',
+      activeStepKey: 'Deploy Contract',
       txHashes: {
         'Contract Deployment': null,
         'Collateral Pool Deployment': null
@@ -569,7 +566,7 @@ class DeployStep extends BaseStepComponent {
         currentStep: 'pending'
       }
     });
-    this.props.onDeployContract();
+    this.props.deployContract();
   }
 
   onUpdateCurrStep(currentStep) {
@@ -585,28 +582,20 @@ class DeployStep extends BaseStepComponent {
       case 'collateralPoolDeploying':
         currStepNum = 2;
         break;
+      case 'linkContract':
+        currStepNum = 3;
+        break;
       case 'rejected':
       case 'fulfilled':
-        currStepNum = 3;
+        currStepNum = 4;
         break;
       default:
         currStepNum = 1;
     }
-
-    // update state and trigger active panel change on slight delay to make
-    // updated tx hash/loader changes visible
-    this.setState(
-      {
-        currStepNum
-      },
-      () =>
-        currStepNum >= 1 && currStepNum <= 3
-          ? setTimeout(
-              () => this.onChangeActivePanel(this.panelKeys[currStepNum - 1]),
-              'rejected' === currentStep ? 0 : 1250
-            )
-          : null
-    );
+    // update state with the current step number
+    this.setState({
+      currStepNum
+    });
   }
 
   onUpdateTxHashes(nextProps) {
@@ -619,230 +608,133 @@ class DeployStep extends BaseStepComponent {
     this.setState({ txHashes });
   }
 
-  onChangeActivePanel(newActivePanelKey) {
-    this.setState({
-      activePanelKey: newActivePanelKey
-    });
+  getStepIcon(key) {
+    if (key === 'Deployment Results') {
+      return this.props.contract ? 'check-circle-o' : 'close-circle-o';
+    }
+    return 'loading';
   }
 
-  renderPanel(config) {
+  renderSteps(config, i) {
     let { currStepNum, txHashes } = this.state;
-    let {
-      key,
-      stepNum,
-      pendingText,
-      loadingText,
-      completedText,
-      errorText,
-      subactions
-    } = config;
+    let { key, description } = config;
 
-    let loading =
-      'Deployment Results' === key ? false : currStepNum === stepNum;
-    let pending = currStepNum < stepNum;
     let txHash = txHashes[key];
 
-    let panelStyle = {
-      background: 'transparent',
-      borderRadius: 4,
-      border: 'none',
-      overflow: 'hidden'
-    };
-
-    let panelHeader = (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 30,
-              height: 30,
-              borderRadius: 15,
-              backgroundColor: '#02E2C1',
-              margin: 0
-            }}
-          >
-            <h4 style={{ color: 'black', margin: 0 }}>{stepNum}</h4>
-          </div>
-
-          <h3 style={{ margin: 0, marginLeft: 20 }}>{key}</h3>
-        </div>
-
-        <Button
-          size={'small'}
-          loading={loading}
-          style={{
-            marginRight: 34,
-            borderRadius: 4,
-            backgroundColor: '#02E2C1',
-            color: '#171F26'
-          }}
-        >
-          {this.props.error
-            ? errorText
-            : loading
-              ? loadingText
-              : pending
-                ? pendingText
-                : completedText}
-        </Button>
-      </div>
-    );
-
-    let panelContent =
-      'Deployment Results' === key ? (
-        <Row className={'panel-content-wrap'} type={'flex'} align={'middle'}>
-          <Col
-            style={{ paddingBottom: 20 }}
-            lg={{ span: 24 }}
-            sm={{ span: 24 }}
-            xs={{ span: 24 }}
-          >
-            {this.props.contract ? (
-              <div id={'contract-info-wrap'}>
-                <h3>{'Your contract has successfully deployed!'}</h3>
-
-                <p>
-                  {'Contract address: '}
-                  <a
-                    href={`${getEtherscanUrl(this.props.network)}/address/${
-                      this.props.contract.address
-                    }`}
-                    target={'_blank'}
-                  >
-                    {this.props.contract.address}
-                  </a>
-                </p>
-
-                <br />
-
-                <Link to={'/contract/explorer'}>
-                  <Button type={'primary'}>{'Explore All Contracts'}</Button>
-                </Link>
-              </div>
-            ) : (
-              <div>
-                <h3>{'There was an error deploying your contract.'}</h3>
-
-                <p>{this.props.error}</p>
-
-                <div style={{ display: 'flex' }}>
-                  <Button
-                    id={'retry-button'}
-                    type={'primary'}
-                    onClick={this.onRetry.bind(this)}
-                  >
-                    {'Retry'}
-                  </Button>
-
-                  <div style={{ width: 20 }} />
-
-                  <Button
-                    type={'default'}
-                    onClick={() => this.props.history.push('/')}
-                  >
-                    {'Cancel'}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Col>
-        </Row>
-      ) : (
-        <Row className={'panel-content-wrap'} type={'flex'} align={'middle'}>
-          <Col lg={{ span: 18 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-            <Timeline>
-              {subactions.map((subaction, i) => (
-                <Timeline.Item key={`subaction-${i}`} style={{ padding: 0 }}>
-                  <Row>
-                    <h3>{subaction.title}</h3>
-                    <h4>{"What's happening?"}</h4>
-                    <p>{subaction.explanation}</p>
-                  </Row>
-                </Timeline.Item>
-              ))}
-
-              <Timeline.Item
-                dot={!txHash && <Icon type={'loading'} />}
-                style={{ padding: 0 }}
-              >
-                <Row>
-                  <h3>
-                    {'Transaction Hash: '}
-                    {txHash ? (
-                      <a
-                        href={`${getEtherscanUrl(
-                          this.props.network
-                        )}/tx/${txHash}`}
-                        target={'_blank'}
-                      >
-                        {txHash}
-                      </a>
-                    ) : (
-                      'TBD'
-                    )}
-                  </h3>
-                </Row>
-              </Timeline.Item>
-            </Timeline>
-          </Col>
-          <Col lg={{ span: 6 }} sm={{ span: 0 }} xs={{ span: 0 }}>
-            <div className={'hide-on-mobile'}>{loading && <Loader />}</div>
-          </Col>
-        </Row>
-      );
-
     return (
-      <Panel
-        key={key}
-        header={panelHeader}
-        disabled={pending}
-        style={panelStyle}
-        showArrow
-      >
-        {panelContent}
-      </Panel>
+      <Step
+        key={i}
+        title={key}
+        icon={
+          currStepNum === i ? (
+            <Icon
+              type={this.getStepIcon(key)}
+              style={{ color: '#00e2c1', fontSize: '33px' }}
+            />
+          ) : (
+            ''
+          )
+        }
+        description={
+          <div>
+            {currStepNum === i &&
+              (key === 'Deployment Results' ? (
+                <div>
+                  {this.props.contract ? (
+                    <div id={'contract-info-wrap'}>
+                      <h4>{'Your contract has successfully deployed!'}</h4>
+                      <p className={'deploy-step-description'}>
+                        {'Contract address: '}
+                        <a
+                          href={`${getEtherscanUrl(
+                            this.props.network
+                          )}/address/${this.props.contract.address}`}
+                          target={'_blank'}
+                        >
+                          {this.props.contract.address}
+                        </a>
+                      </p>
+                      <Link to={'/contract/explorer'}>
+                        <Button type={'primary'}>
+                          {'Explore All Contracts'}
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div>
+                      <h4>{'There was an error deploying your contract.'}</h4>
+
+                      <p className={'deploy-step-description'}>
+                        {this.props.error}
+                      </p>
+
+                      <div style={{ display: 'flex' }}>
+                        <Button
+                          id={'retry-button'}
+                          type={'primary'}
+                          onClick={this.onRetry.bind(this)}
+                          style={{ padding: '0 35px', marginRight: '20px' }}
+                        >
+                          {'Retry'}
+                        </Button>
+
+                        <Button
+                          ghost
+                          type={'default'}
+                          onClick={() => this.props.history.push('/')}
+                          style={{ padding: '0 35px' }}
+                        >
+                          {'Cancel'}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Collapse bordered={false} className="m-bottom-40">
+                  <Panel
+                    header="Help me understand this"
+                    style={{ color: '#00e2c1' }}
+                    showArrow={false}
+                  >
+                    <p className={'deploy-step-description'}>
+                      Transaction Hash:
+                      {txHash ? (
+                        <a
+                          href={`${getEtherscanUrl(
+                            this.props.network
+                          )}/tx/${txHash}`}
+                          target={'_blank'}
+                        >
+                          {txHash}
+                        </a>
+                      ) : (
+                        'TBD'
+                      )}
+                    </p>
+                    <h4>{description.title}</h4>
+                    <p>{description.explanation}</p>
+                  </Panel>
+                </Collapse>
+              ))}
+          </div>
+        }
+      />
     );
   }
 
   render() {
-    let { activePanelKey } = this.state;
-    let collapseStyle = {
-      background: '#171F26',
-      border: '1px solid #02E2C1',
-      borderRadius: 6,
-      height: 'auto'
-    };
-
     return (
-      <Col
-        style={this.props.containerStyles || {}}
-        lg={{ span: 22, offset: 1 }}
-        sm={{ span: 24 }}
-        xs={{ span: 24 }}
-      >
-        <Collapse
-          accordion
-          activeKey={activePanelKey}
-          style={collapseStyle}
-          onChange={newActivePanelKey =>
-            this.onChangeActivePanel(newActivePanelKey)
-          }
-        >
-          {/* render panels */
-          this.panelKeys.map((key, i) =>
-            this.renderPanel(this.panelConfig[key])
-          )}
-        </Collapse>
-      </Col>
+      <div className="step-container" id="deploy-step">
+        <h1>Deploying Contracts</h1>
+        <div className="step-inner-container" style={{ padding: '50px' }}>
+          <Steps direction="vertical" current={this.state.currStepNum - 1}>
+            {this.stepKeys.map((key, i) =>
+              this.renderSteps(this.stepConfig[key], i + 1)
+            )}
+          </Steps>
+        </div>
+      </div>
     );
   }
 }
