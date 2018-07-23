@@ -14,8 +14,11 @@ import {
 const Step = Steps.Step;
 
 const parentColLayout = {
-  xl: {
+  xxl: {
     span: 10
+  },
+  xl: {
+    span: 12
   },
   lg: {
     span: 14

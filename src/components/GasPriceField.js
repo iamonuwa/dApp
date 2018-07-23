@@ -267,7 +267,7 @@ class GasPriceField extends Component {
             </div>
           )}
           <Row gutter={16}>
-            <Col span={24} className="m-top-40">
+            <Col span={this.props.isSimplified ? 24 : 12} className="m-top-40">
               <FormItem
                 label={
                   <h2 style={{ position: 'relative' }}>
@@ -318,7 +318,10 @@ class GasPriceField extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col
+              span={this.props.isSimplified ? 24 : 12}
+              className={this.props.isSimplified ? '' : 'm-top-40'}
+            >
               <FormItem
                 label={
                   <h2 style={{ position: 'relative' }}>

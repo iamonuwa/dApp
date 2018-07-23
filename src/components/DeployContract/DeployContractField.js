@@ -122,18 +122,6 @@ const fieldSettingsByName = {
     component: ({ showHint }) => <Input />
   },
 
-  contractNameSimplified: {
-    initialValue: 'ETH/BTC-Kraken_YYYY-MM-DD',
-    rules: [
-      {
-        required: true,
-        message: 'Please enter a name for your contract'
-      }
-    ],
-    extra: `Name of contract should be descriptive, e.g. "ETH/BTC-20180228-Kraken"`,
-    component: ({ showHint }) => <Input />
-  },
-
   collateralTokenAddress: {
     label: 'Base Token Address',
     initialValue: '0x3333333333333333333333333333333333333333',
@@ -179,6 +167,7 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
+          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -217,6 +206,7 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
+          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -254,6 +244,7 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
+          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -291,6 +282,7 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
+          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -351,6 +343,7 @@ const fieldSettingsByName = {
   },
 
   expirationTimeStamp: {
+    label: 'Expiration Date & Time',
     initialValue: moment().add(28, 'days'),
     rules: [
       {
@@ -452,7 +445,7 @@ const fieldSettingsByName = {
 };
 
 function DeployContractField(props) {
-  const { name, form, initialValue, showHint, onChange } = props;
+  const { name, form, initialValue, showHint, onChange, hideLabel } = props;
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
@@ -462,7 +455,7 @@ function DeployContractField(props) {
       : fieldSettings.rules;
   const label = (
     <span>
-      {fieldSettings.label}{' '}
+      {!hideLabel && fieldSettings.label}{' '}
       {showHint && (
         <Hint hint={fieldSettings.extra} hintTitle={fieldSettings.label} />
       )}

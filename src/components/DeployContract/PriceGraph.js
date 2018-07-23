@@ -7,30 +7,36 @@ function line(ctx, position, color, text) {
   ctx.moveTo(20, position);
   ctx.lineTo(180, position);
   ctx.stroke();
-  ctx.font="16px 'Work Sans', sans-serif ";
+  ctx.font = "14px 'Work Sans', sans-serif ";
   ctx.fillText(text, 200, position + 5, 100);
 }
 export class PriceGraph extends React.Component {
   componentDidMount() {
-      this.updateCanvas();
-      this.setDPI(this.refs.canvas, 300);
+    this.updateCanvas();
+    this.setDPI(this.refs.canvas, 300);
   }
   componentDidUpdate() {
-      this.updateCanvas();
+    this.updateCanvas();
   }
 
   componentWillReceiveProps() {
     this.updateCanvas();
   }
   updateCanvas() {
-      const ctx = this.refs.canvas.getContext('2d');
-      ctx.clearRect(0, 0, 300, 160);
-      line(ctx, 20, '#ffffff', 'Price Cap');
-      line(ctx, 150, '#ffffff', 'Price Floor');
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.clearRect(0, 0, 300, 160);
+    line(ctx, 20, '#ffffff', 'Price Cap');
+    line(ctx, 150, '#ffffff', 'Price Floor');
 
-      let pY = 150 - (130/100 * (((this.props.price - this.props.priceFloor) * 100) / (this.props.priceCap - this.props.priceFloor)));
-      pY = pY >= 135 ? 135 : pY <= 35 ? 35 : pY;
-      line(ctx, pY,"#00FFE2", this.props.price);
+    let pY =
+      150 -
+      130 /
+        100 *
+        ((this.props.price - this.props.priceFloor) *
+          100 /
+          (this.props.priceCap - this.props.priceFloor));
+    pY = pY >= 135 ? 135 : pY <= 35 ? 35 : pY;
+    line(ctx, pY, '#00FFE2', this.props.price);
   }
   setDPI(canvas, dpi) {
     canvas.style.width = canvas.style.width || canvas.width + 'px';
@@ -48,10 +54,15 @@ export class PriceGraph extends React.Component {
     ctx.setTransform(backupScale, 0, 0, backupScale, 0, 0);
     ctx.drawImage(backup, 0, 0);
     ctx.setTransform(scaleFactor, 0, 0, scaleFactor, 0, 0);
-}
+  }
   render() {
-       return (
-           <canvas ref="canvas" width={300} height={160}/>
-       );
+    return (
+      <canvas
+        ref="canvas"
+        width={300}
+        height={160}
+        style={{ marginLeft: '-20px' }}
+      />
+    );
   }
 }

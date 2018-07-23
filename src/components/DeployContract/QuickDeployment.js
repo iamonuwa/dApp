@@ -10,7 +10,7 @@ const formButtonLayout = {
     span: 10
   },
   md: {
-    span: 18
+    span: 12
   },
   xs: {
     span: 24
@@ -33,8 +33,11 @@ const formItemColLayout = {
 };
 
 const parentColLayout = {
-  xl: {
+  xxl: {
     span: 10
+  },
+  xl: {
+    span: 12
   },
   md: {
     span: 14
@@ -140,14 +143,12 @@ class QuickDeployment extends Component {
           }
         />
         <div className="page">
+          <h1 className="text-center">Quick Deploy Contracts</h1>
           <Row type="flex" justify="center">
             <Col
               {...parentColLayout}
               className="deploy-contract-container quick-deploy"
             >
-              <h2 className="text-center m-bottom-20">
-                Quick Deploy Contracts
-              </h2>
               <Form
                 onSubmit={this.handleDeploy.bind(this)}
                 layout="vertical"

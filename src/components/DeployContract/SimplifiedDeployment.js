@@ -52,6 +52,7 @@ class SimplifiedDeployment extends Component {
   }
 
   toNextStep() {
+    window.scrollTo(0, 0);
     this.setState({
       step: this.state.step + 1,
       transitionDirection: 'next'
@@ -59,6 +60,7 @@ class SimplifiedDeployment extends Component {
   }
 
   toPrevStep() {
+    window.scrollTo(0, 0);
     this.setState({
       step: this.state.step - 1,
       transitionDirection: 'prev'
