@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { Alert, Button, Form, Input, InputNumber } from 'antd';
-import { mount, shallow } from 'enzyme';
+import { mount, shallow, render } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -15,6 +15,7 @@ import {
   ExchangeStep
 } from '../../../src/components/DeployContract/Steps';
 import Field from '../../../src/components/DeployContract/DeployContractField';
+import { PriceGraph } from '../../../src/components/DeployContract/PriceGraph';
 
 describe('NameContractStep', () => {
   let nameContractStep;
@@ -41,7 +42,7 @@ describe('PricingStep', () => {
   let pricingStep;
 
   beforeEach(() => {
-    pricingStep = mount(<PricingStep />);
+    pricingStep = render(<PricingStep />);
   });
 
   it('renders without crashing', () => {
@@ -66,18 +67,13 @@ describe('PricingStep Simplified', () => {
   beforeEach(() => {
     updateDeploymentStateSpy = sinon.spy();
     onNextClickedSpy = sinon.spy();
-    pricingStep = mount(
+    pricingStep = render(
       <PricingStep
         updateDeploymentState={updateDeploymentStateSpy}
         onNextClicked={onNextClickedSpy}
         isSimplified
       />
     );
-  });
-
-  it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<PricingStep isSimplified />, div);
   });
 
   it('should display four inputs felds to accept price cap and price floor', () => {
