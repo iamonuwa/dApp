@@ -11,7 +11,7 @@ import Table from '../../../src/components/SimExchange/TradeComponents/Table';
 import BigNumber from 'bignumber.js';
 
 const mockContract = {
-  key: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
+  contract: { key: '0x6467854f25ff1f1ff8c11a717faf03e409b53635' },
   CONTRACT_NAME: 'ETHXBT',
   COLLATERAL_TOKEN: 'FakeDollars',
   COLLATERAL_TOKEN_ADDRESS: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
@@ -31,31 +31,24 @@ const mockContract = {
 
 describe('Trades', () => {
   let props;
+  let state;
   let tradesContainer;
 
   beforeEach(() => {
     props = {
-      asks: [],
-      bids: [],
+      buys: [],
+      sells: [],
       simExchange: {
         contract: {}
       }
     };
 
+    state = {
+      buys: [],
+      sells: []
+    };
+
     tradesContainer = shallow(<Trades {...props} />);
-  });
-
-  it('renders bids and asks', () => {
-    const containsBids = tradesContainer.containsMatchingElement(
-      <TradeContainer {...props} type="bids" market="" data={props.bids} />
-    );
-
-    const containsAsks = tradesContainer.containsMatchingElement(
-      <TradeContainer {...props} type="asks" market="" data={props.asks} />
-    );
-
-    expect(containsBids, 'Should render bids').to.be.true;
-    expect(containsAsks, 'Should render asks').to.be.true;
   });
 
   it('should getUnallocatedCollateral', async () => {
@@ -80,6 +73,7 @@ describe('Trades', () => {
 describe('TradesContainer', () => {
   let props;
   let tradeContainer;
+  let trades;
   let mountTradeContainer;
   let state;
 
@@ -88,7 +82,9 @@ describe('TradesContainer', () => {
       asks: [],
       bids: [],
       simExchange: {
-        contract: {}
+        contract: {
+          MARKET_COLLATERAL_POOL_ADDRESS: new BigNumber()
+        }
       }
     };
 
@@ -96,18 +92,15 @@ describe('TradesContainer', () => {
       <TradeContainer {...props} type="bids" market="" data={props.bids} />,
       { context: { state: state } }
     );
+
+    trades = shallow(<Trades {...props} />);
   });
 
   it('shows order on row select', () => {
-    let onRowSelect = sinon.stub();
-    let tableContainer = shallow(
-      <Table {...props} onRowSelect={onRowSelect} />
-    );
+    let tableContainer = shallow(<Table {...props} />);
 
     tradeContainer.update();
     tableContainer.update();
-
-    tradeContainer.instance().onRowSelect();
   });
 
   it('should open trade confirmation modal', () => {
@@ -156,6 +149,122 @@ describe('TradesContainer', () => {
         '',
         'bids'
       );
+    expect(spy.called).to.equal(true);
+  });
+
+  it('should getOrders from market api', () => {
+    let fetchStub = sinon.stub(window, 'fetch');
+    let spy = sinon.spy(trades.instance(), 'getOrders');
+
+    let body = {
+      contract: {
+        name: 'BIT_OMGUSD_USDT_1531938985085',
+        address: '0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99',
+        price: '698970',
+        priceDecimalPlaces: '5',
+        priceTimestamp: 1532365909109
+      },
+      buys: [
+        {
+          contractAddress: '0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99',
+          expirationTimestamp: '1532369508',
+          feeRecipient: '0x0000000000000000000000000000000000000000',
+          maker: '0x361ffaa1c30267ffb4c74c87fd50751b038d20b4',
+          makerFee: '0',
+          orderQty: '1',
+          price: '702045',
+          remainingQty: '1',
+          salt:
+            '5.32226797211280170343922640645038959045732426814250374849070140144286219789637e+76',
+          taker: '0x0000000000000000000000000000000000000000',
+          takerFee: '0',
+          ecSignature: {
+            v: '0x1b',
+            r:
+              '0x9fcc4c2df2ff2af2e812330ce35698890b21f799eed0b035275abb7b69bcd534',
+            s:
+              '0x075d7fdbe0e2b1814993b67f43499f0c22293fc2a84349377bd1bd77f0b55136'
+          }
+        },
+        {
+          contractAddress: '0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99',
+          expirationTimestamp: '1532369508',
+          feeRecipient: '0x0000000000000000000000000000000000000000',
+          maker: '0x361ffaa1c30267ffb4c74c87fd50751b038d20b4',
+          makerFee: '0',
+          orderQty: '1',
+          price: '702675',
+          remainingQty: '1',
+          salt:
+            '4.57283481906925122336007710256343417468824516693689586005598460783289838937629e+76',
+          taker: '0x0000000000000000000000000000000000000000',
+          takerFee: '0',
+          ecSignature: {
+            v: '0x1b',
+            r:
+              '0x93dc2c1c434abc060ed3f8069fd8e893095ff2e60db72a1c0279d860a9289d68',
+            s:
+              '0x125403d8c6f77b793cfaa87621e21161e2bd417b68a6810fede21e9aec586fb2'
+          }
+        }
+      ],
+      sells: [
+        {
+          contractAddress: '0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99',
+          expirationTimestamp: '1532369508',
+          feeRecipient: '0x0000000000000000000000000000000000000000',
+          maker: '0x361ffaa1c30267ffb4c74c87fd50751b038d20b4',
+          makerFee: '0',
+          orderQty: '-1',
+          price: '693500',
+          remainingQty: '1',
+          salt:
+            '9.68613323383461803244848896843308929246354481741034086363465017514840230918937e+76',
+          taker: '0x0000000000000000000000000000000000000000',
+          takerFee: '0',
+          ecSignature: {
+            v: '0x1c',
+            r:
+              '0x079b0da71c6cda366f037e151890daf60d3e2456752a991f7cb33081df36d9c3',
+            s:
+              '0x2939dce51af8cce4e2c6aee7930b0def900cd238c3b1e3c027c55c416aadfcca'
+          }
+        },
+        {
+          contractAddress: '0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99',
+          expirationTimestamp: '1532369508',
+          feeRecipient: '0x0000000000000000000000000000000000000000',
+          maker: '0x361ffaa1c30267ffb4c74c87fd50751b038d20b4',
+          makerFee: '0',
+          orderQty: '-1',
+          price: '693825',
+          remainingQty: '1',
+          salt:
+            '1.5339000473208059890074052649635697341836183179041761463453844318645637395494e+75',
+          taker: '0x0000000000000000000000000000000000000000',
+          takerFee: '0',
+          ecSignature: {
+            v: '0x1c',
+            r:
+              '0x99e10fb3cd5fe83003e6ffdd4cce6c7a37bd48f2d235092f08f8bad73706bcde',
+            s:
+              '0x2c73a7f924fce6efc52e3c0e4890ebaddf8725f61db9399b47df362ecfd99b34'
+          }
+        }
+      ]
+    };
+
+    let response = {
+      json: () => {
+        return body;
+      }
+    };
+    fetchStub.returns(Promise.resolve(response));
+    trades.setProps({
+      simExchange: mockContract
+    });
+    trades.instance().getOrders('0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99');
+
     expect(spy.called).to.equal(true);
   });
 });

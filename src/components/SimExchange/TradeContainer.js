@@ -6,8 +6,6 @@ import { MarketJS } from '../../util/marketjs/marketMiddleware';
 
 import { Modal, Table as AntTable } from 'antd';
 
-import columns from './Columns';
-
 class Buy extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +22,6 @@ class Buy extends Component {
     };
 
     this.onSubmit = this.onSubmit.bind(this);
-    this.onRowSelect = this.onRowSelect.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -46,10 +43,6 @@ class Buy extends Component {
     });
   }
 
-  onRowSelect(order) {
-    this.setState({ order });
-  }
-
   showModal() {
     this.setState({ modal: true });
   }
@@ -68,6 +61,18 @@ class Buy extends Component {
 
   render() {
     const { order } = this.state;
+    const columns = [
+      {
+        title: 'Amount',
+        dataIndex: 'qty',
+        key: 'qty'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price'
+      }
+    ];
 
     return (
       <Fragment>
@@ -80,11 +85,7 @@ class Buy extends Component {
           />
         </div>
 
-        <Table
-          {...this.props}
-          title={`${this.props.type}`}
-          onRowSelect={this.onRowSelect}
-        />
+        <Table {...this.props} title={`${this.props.type}`} />
 
         {order && (
           <Modal

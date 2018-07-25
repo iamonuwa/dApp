@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
+import uniqueId from 'lodash/uniqueId';
 
 import { Table } from 'antd';
-
-import columns from '../Columns';
+import { fromBaseUnit } from '../../../util/utils';
 
 import './Table.less';
 
 class OrdersTable extends Component {
-  constructor() {
-    super();
-
-    this.onRowSelect = this.onRowSelect.bind(this);
-  }
-
-  onRowSelect(record) {
-    this.props.onRowSelect(record);
-  }
-
   render() {
+    const columns = [
+      {
+        title: 'Amount',
+        dataIndex: 'orderQty',
+        key: 'orderQty',
+        render: text => text
+      },
+      {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price',
+        render: text =>
+          fromBaseUnit(
+            parseInt(text, 10),
+            parseInt(this.props.contract.priceDecimalPlaces, 10)
+          )
+      }
+    ];
+
     return (
       <Table
-        onRow={order => ({
-          onClick: () => this.onRowSelect(order)
-        })}
         pagination={false}
         title={() => this.props.title}
         size="small"
         dataSource={this.props.data}
         columns={columns}
-        rowKey="orderHash"
+        rowKey={() => uniqueId('orderHash')}
       />
     );
   }
