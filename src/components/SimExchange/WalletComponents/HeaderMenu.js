@@ -29,15 +29,14 @@ class HeaderMenu extends Component {
     console.log(info);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     if (
-      nextProps.simExchange.contract !== this.props.simExchange.contract &&
-      nextProps.simExchange.contract !== null
+      prevProps.simExchange.contract !== this.props.simExchange.contract &&
+      prevProps.simExchange.contract !== null
     ) {
-      this.getBalances(nextProps);
+      this.getBalances(prevProps);
     }
   }
-
   componentDidMount() {
     this.props.simExchange.contract && this.getBalances(this.props);
   }

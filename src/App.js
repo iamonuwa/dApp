@@ -12,7 +12,7 @@ import './less/App.less';
 const { Content } = Layout;
 
 class App extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (localStorage) {
       localStorage.setItem('showWelcomeMessage', true);
     }

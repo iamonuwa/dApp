@@ -25,12 +25,12 @@ class Trades extends Component {
       this.getUnallocatedCollateral(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     if (
-      nextProps.simExchange.contract !== this.props.simExchange.contract &&
-      nextProps.simExchange.contract !== null
+      prevProps.simExchange.contract !== this.props.simExchange.contract &&
+      prevProps.simExchange.contract !== null
     ) {
-      this.getUnallocatedCollateral(nextProps);
+      this.getUnallocatedCollateral(prevProps);
     }
   }
 

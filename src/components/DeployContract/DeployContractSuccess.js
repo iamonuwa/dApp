@@ -5,6 +5,7 @@ function DeployContractSuccess({ contract }) {
     <span>
       Contract successfully deployed at:{' '}
       <a
+        rel="noopener noreferrer"
         href={`https://etherscan.io/address/${contract.address}`}
         target="_blank"
       >

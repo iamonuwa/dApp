@@ -26,15 +26,15 @@ class ContractsList extends Component {
     contracts: this.props.contracts
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.contracts && !this.props.loading) {
       this.props.onLoad();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.contracts !== this.state.contracts) {
-      this.setState({ contracts: nextProps.contracts });
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.contracts !== this.state.contracts) {
+      this.setState({ contracts: prevProps.contracts });
     }
   }
 

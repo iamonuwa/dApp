@@ -6,7 +6,11 @@ function TestQuerySuccess({ network, txHash }) {
   switch (network) {
     case 'rinkeby':
       link = (
-        <a href={`https://rinkeby.etherscan.io/tx/${txHash}`} target="_blank">
+        <a
+          rel="noopener noreferrer"
+          href={`https://rinkeby.etherscan.io/tx/${txHash}`}
+          target="_blank"
+        >
           {' '}
           View on Etherscan
         </a>
@@ -14,7 +18,11 @@ function TestQuerySuccess({ network, txHash }) {
       break;
     case 'mainnet':
       link = (
-        <a href={`https://etherscan.io/tx/${txHash}`} target="_blank">
+        <a
+          rel="noopener noreferrer"
+          href={`https://etherscan.io/tx/${txHash}`}
+          target="_blank"
+        >
           {' '}
           View on Etherscan
         </a>

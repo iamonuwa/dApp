@@ -19,8 +19,8 @@ class BuyTable extends Component {
     this.decoder = new InputDataDecoder(abi);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { simExchange, web3 } = nextProps;
+  componentDidUpdate(prevProps) {
+    const { simExchange, web3 } = prevProps;
 
     if (
       simExchange.contract &&
